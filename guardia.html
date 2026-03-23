@@ -30,17 +30,24 @@
 
         html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess);
 
-        function onScanSuccess(decodedText) {
-            try {
-                const data = JSON.parse(decodedText);
-                document.getElementById('nombre-invitado').innerText = data.n;
-                document.getElementById('modal').classList.remove('hidden');
-                // Sonido de éxito (opcional)
-                window.navigator.vibrate(200);
-            } catch (e) {
-                console.error("QR no válido");
-            }
-        }
+       function onScanSuccess(decodedText) {
+    try {
+        const data = JSON.parse(decodedText);
+        
+        // Armamos el texto para el modal
+        const infoHtml = `
+            <p class="text-2xl font-bold text-slate-800">${data.n}</p>
+            <p class="text-lg text-slate-500">DNI: ${data.d}</p>
+            <p class="text-lg font-mono bg-slate-100 py-1 px-3 rounded-lg mt-2 inline-block">Patente: ${data.p}</p>
+        `;
+        
+        document.getElementById('nombre-invitado').innerHTML = infoHtml;
+        document.getElementById('modal').classList.remove('hidden');
+        window.navigator.vibrate(200);
+    } catch (e) {
+        console.error("QR no válido");
+    }
+}
 
         function cerrarModal() {
             document.getElementById('modal').classList.add('hidden');
