@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VantageCom - Vecinos</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .app-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #F8F9FB;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        /* Estilo para el botón invisible sobre la imagen */
+        .btn-overlay {
+            position: absolute;
+            top: 285px; /* Ajustado para que caiga sobre el botón azul de tu imagen */
+            left: 10%;
+            width: 80%;
+            height: 50px;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-gray-200 font-sans">
+
+    <div class="app-container" id="main-screen">
+        <img src="https://carerivalentino-gif.github.io/vantagecom/img_app.png" alt="App Interface" class="w-full h-auto">
+        
+        <button onclick="mostrarGenerador()" class="btn-overlay"></button>
+    </div>
+
+    <div id="generator-screen" class="hidden fixed inset-0 bg-white z-50 p-6 flex flex-col items-center">
+        <div class="w-full flex justify-start mb-6">
+            <button onclick="volver()" class="text-blue-600 font-bold">← Volver</button>
+        </div>
+
+        <h1 class="text-2xl font-bold text-slate-800 mb-6 text-center">Generar Invitación</h1>
+        
+        <input type="text" id="nombre" placeholder="Nombre del Invitado" 
+            class="w-full p-4 bg-slate-100 rounded-2xl mb-4 outline-none focus:ring-2 focus:ring-blue-500">
+        
+        <button onclick="generar()" class="w-full bg-[#007BFF] text-white font-bold py-4 rounded-2xl shadow-lg transition-transform active:scale-95">
+            CREAR PASE QR
+        </button>
+
+        <div id="qr-container" class="hidden mt-10 flex flex-col items-center border-t pt-8 w-full">
+            <div id="qrcode" class="p-4 bg-white border-8 border-blue-50 rounded-3xl"></div>
+            <p class="mt-4 text-blue-600 font-bold">¡Listo! Mostralo en la guardia</p>
+        </div>
+    </div>
+
+    <script>
+        function mostrarGenerador() {
+            document.getElementById('generator-screen').classList.remove('hidden');
+        }
+
+        function volver() {
+            document.getElementById('generator-screen').classList.add('hidden');
+        }
+
+        function generar() {
+            const nombre = document.getElementById('nombre').value;
+            if (!nombre) return alert("Por favor, ingresá un nombre");
+            
+            document.getElementById('qrcode').innerHTML = "";
+            document.getElementById('qr-container').classList.remove('hidden');
+            
+            const data = JSON.stringify({ n: nombre, t: Date.now() });
+            
+            new QRCode(document.getElementById("qrcode"), {
+                text: data,
+                width: 200,
+                height: 200,
+                colorDark : "#1e293b",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        }
+    </script>
+</body>
+</html>
